@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Dashboard from './pages/Dashboard';
 import Settings from './pages/Settings';
+import ReportsPage from './pages/ReportsPage'; // YENİ
+
 import './App.css';
 
 function App() {
@@ -28,6 +30,12 @@ function App() {
           >
             ⚙️ Ayarlar
           </button>
+          <button 
+  className={`nav-link ${currentPage === 'reports' ? 'active' : ''}`}
+  onClick={() => setCurrentPage('reports')}
+>
+  📋 Raporlar  {/* İkon ve isim düzeltildi */}
+</button>
         </div>
 
         <div className="nav-actions">
@@ -44,6 +52,7 @@ function App() {
       <main className="app-main">
         {currentPage === 'dashboard' && <Dashboard />}
         {currentPage === 'settings' && <Settings />}
+        {currentPage === 'reports' && <ReportsPage />}
       </main>
 
       {/* Footer */}

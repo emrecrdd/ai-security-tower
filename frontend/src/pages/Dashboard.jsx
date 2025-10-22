@@ -85,7 +85,7 @@ const Dashboard = () => {
               </div>
               
               <div className="recent-activity">
-                <h3>🕒 Son Aktivite</h3>
+                <h3> ALARM ANALİTİK MERKEZİ</h3>
                 <LogTable />
               </div>
             </div>

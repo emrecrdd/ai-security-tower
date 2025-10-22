@@ -10,7 +10,7 @@ exports.getAllCameras = async (req, res) => {
   }
 };
 
-// Tek kamera detay
+// Tek kamera detaya
 exports.getCameraById = async (req, res) => {
   try {
     const camera = await Camera.findByPk(req.params.id);

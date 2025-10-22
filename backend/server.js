@@ -9,6 +9,7 @@ const logger = require("./utils/logger");
 const sequelize = require("./config/database");
 require("./models/Camera");
 require("./models/Alarm");
+require("./models/Report");
 
 // 🔹 Ortam değişkenleri
 dotenv.config();

@@ -1,0 +1,381 @@
+/* AlarmPanel.css - OPERATÖR KONTROL MERKEZİ */
+.alarm-panel.command-center {
+  background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+  border: 1px solid #333;
+  border-radius: 16px;
+  padding: 0;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+/* Header - Profesyonel */
+.panel-header {
+  background: linear-gradient(90deg, #74a7d6 0%, #94a3b3 100%);
+  padding: 20px 24px;
+  border-bottom: 1px solid #333;
+}
+
+.header-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.header-title h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 255, 136, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #00ff88;
+  color: #00ff88;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pulse {
+  width: 8px;
+  height: 8px;
+  background: #00ff88;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+  box-shadow: 0 0 8px #00ff88;
+}
+
+.header-stats {
+  display: flex;
+  gap: 16px;
+}
+
+.urgent-count {
+  background: #ff4d4f;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.total-count {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ccc;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Kritik Alarm Listesi */
+.alarms-list.critical-alarms {
+  padding: 20px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.alarm-item.critical {
+  background: linear-gradient(135deg, #2a0a0a 0%, #1a0a0a 100%);
+  border: 1px solid #ff4d4f;
+  border-left: 6px solid #ff4d4f;
+  border-radius: 12px;
+  margin: 12px 0;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 77, 79, 0.2);
+}
+
+.alarm-item.critical:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 77, 79, 0.3);
+}
+
+.alarm-item.critical.medium {
+  background: linear-gradient(135deg, #2a200a 0%, #1a150a 100%);
+  border-left-color: #faad14;
+  box-shadow: 0 4px 12px rgba(250, 173, 20, 0.2);
+}
+
+/* Alarm Göstergesi */
+.alarm-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.alarm-icon {
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.risk-badge {
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Alarm İçeriği */
+.alarm-content {
+  flex: 1;
+}
+
+.alarm-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.alarm-type strong {
+  font-size: 16px;
+  color: #fff;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.object-type {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #ccc;
+}
+
+/* Güven Çubuğu */
+.alarm-confidence {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 120px;
+}
+
+.confidence-bar {
+  width: 80px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00ff88, #00cc66);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.confidence-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: #00ff88;
+  min-width: 40px;
+}
+
+/* Alarm Meta */
+.alarm-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.meta-left {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.camera-badge {
+  background: rgba(24, 144, 255, 0.2);
+  color: #1890ff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.time-ago {
+  color: #888;
+  font-size: 12px;
+}
+
+.meta-right {
+  display: flex;
+  gap: 8px;
+}
+
+/* Butonlar */
+.verify-btn, .dismiss-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.verify-btn {
+  background: linear-gradient(135deg, #00ff88, #00cc66);
+  color: #000;
+}
+
+.verify-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 255, 136, 0.4);
+}
+
+.dismiss-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ccc;
+  border: 1px solid #333;
+}
+
+.dismiss-btn:hover {
+  background: rgba(255, 77, 79, 0.2);
+  color: #ff4d4f;
+  border-color: #ff4d4f;
+}
+
+/* Kritik Alarm Yok */
+.no-critical-alarms {
+  text-align: center;
+  padding: 60px 20px;
+  color: #00ff88;
+}
+
+.status-ok {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.status-message h3 {
+  margin: 0 0 8px 0;
+  color: #00ff88;
+  font-size: 18px;
+}
+
+.status-message p {
+  margin: 0;
+  color: #888;
+  font-size: 14px;
+}
+
+/* Sistem Durumu */
+.system-status {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 16px 20px;
+  border-top: 1px solid #333;
+  display: flex;
+  gap: 24px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-dot.active {
+  background: #00ff88;
+  box-shadow: 0 0 8px #00ff88;
+}
+
+/* Scrollbar */
+.alarms-list.critical-alarms::-webkit-scrollbar {
+  width: 6px;
+}
+
+.alarms-list.critical-alarms::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.alarms-list.critical-alarms::-webkit-scrollbar-thumb {
+  background: #1890ff;
+  border-radius: 3px;
+}
+
+/* Animasyon */
+@keyframes pulse {
+  0% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+  100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Loading States */
+.alarm-panel.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #1890ff;
+}
+
+.loading-spinner {
+  font-size: 32px;
+  margin-bottom: 16px;
+  animation: spin 1.5s linear infinite;
+}
+
+.alarm-panel.error {
+  text-align: center;
+  padding: 40px 20px;
+  color: #ff4d4f;
+}
+
+.error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.retry-btn {
+  background: #1890ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
