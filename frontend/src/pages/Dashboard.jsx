@@ -101,7 +101,7 @@ const Dashboard = () => {
                   key={camera.id}
                   cameraId={camera.id}
                   cameraName={camera.name}
-                  streamUrl={`http://localhost:5000/video/${camera.id}`} // Mock URL
+streamUrl={`${process.env.REACT_APP_BACKEND_URL.replace('/api','')}/video/${camera.id}`}
                 />
               ))}
             </div>
