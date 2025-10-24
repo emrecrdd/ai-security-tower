@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ReportsPanel.css';
 
-const API_BASE = process.env.REACT_APP_BACKEND_URL; // env destekli
+const API_BASE = import.meta.env.VITE_BACKEND_URL;
 
 const ReportsPanel = () => {
   const [reportData, setReportData] = useState(null);
