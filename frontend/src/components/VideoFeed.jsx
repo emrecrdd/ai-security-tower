@@ -82,7 +82,7 @@ const VideoFeed = ({ cameraId, cameraName, enabled = true }) => {
 
         try {
        // captureAndSendFrame içinde:
-const res = await fetch(`${BACKEND_URL}/ai/analyze-frame`, {
+const res = await fetch(`${API_BASE}/ai/analyze-frame`, {
   method: 'POST',
   body: formData,
 });
