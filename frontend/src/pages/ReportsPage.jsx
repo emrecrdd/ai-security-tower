@@ -43,7 +43,7 @@ const ReportsPage = () => {
   const [chartData, setChartData] = useState(null);
   const [stats, setStats] = useState(null);
 
-const API_BASE = process.env.REACT_APP_BACKEND_URL;
+const API_BASE = import.meta.env.VITE_BACKEND_URL;
 
   // İstatistik verilerini çek
   const fetchStats = async () => {
