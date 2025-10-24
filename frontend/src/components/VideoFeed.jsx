@@ -5,7 +5,7 @@ const VideoFeed = ({ cameraId, cameraName, enabled = true }) => {
   const overlayRef = useRef(null);
   const animationRef = useRef(null);
   const intervalRef = useRef(null);
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+  const API_BASE = import.meta.env.VITE_BACKEND_URL;
 
 
   const [hasError, setHasError] = useState(false);
