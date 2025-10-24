@@ -1,31 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
 const aiService = require('../services/aiService');
 
-const upload = multer({ 
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 10 * 1024 * 1024 // 10MB limit
-  }
-});
-
-// 🎯 Frontend'den gelen frame'leri analiz et
-router.post('/analyze-frame', upload.single('image'), async (req, res) => {
+// 🎯 BASE64 kabul eden endpoint - MULTER KALDIRILDI
+router.post('/analyze-frame', async (req, res) => {
   try {
-    console.log('📸 AI analiz isteği alındı');
+    console.log('📸 AI analiz isteği alındı - BASE64');
 
-    if (!req.file) {
+    const { frame, cameraId } = req.body;
+
+    if (!frame || !cameraId) {
       return res.status(400).json({ 
         success: false, 
-        error: 'Görsel dosyası gerekiyor' 
+        error: 'Frame ve cameraId gerekiyor' 
       });
     }
 
-    const { cameraId } = req.body;
-    const imageBuffer = req.file.buffer;
+    console.log(`🤖 Analiz başlıyor - Kamera: ${cameraId}, Boyut: ${frame.length} bytes`);
 
-    console.log(`🤖 Analiz başlıyor - Kamera: ${cameraId}, Boyut: ${imageBuffer.length} bytes`);
+    // Base64 string'i buffer'a çevir
+    const base64Data = frame.replace(/^data:image\/\w+;base64,/, '');
+    const imageBuffer = Buffer.from(base64Data, 'base64');
 
     // AI servisini çağır
     const result = await aiService.analyzeSecurityImage(imageBuffer, cameraId);
