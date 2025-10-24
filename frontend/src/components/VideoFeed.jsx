@@ -7,7 +7,6 @@ const VideoFeed = ({ cameraId, cameraName, enabled = true }) => {
   const intervalRef = useRef(null);
   const API_BASE = import.meta.env.VITE_BACKEND_URL;
 
-
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isActive, setIsActive] = useState(false);
@@ -62,7 +61,7 @@ const VideoFeed = ({ cameraId, cameraName, enabled = true }) => {
     };
   }, [enabled]);
 
-  // Frame capture
+  // Frame capture - ✅ BASE64'E DÖNÜŞTÜR
   const captureAndSendFrame = useCallback(async () => {
     if (!videoRef.current || !isActive || !videoRef.current.videoWidth) return;
 
@@ -73,34 +72,39 @@ const VideoFeed = ({ cameraId, cameraName, enabled = true }) => {
       const ctx = canvas.getContext('2d');
       ctx.drawImage(videoRef.current, 0, 0);
 
-      canvas.toBlob(async (blob) => {
-        if (!blob) return;
+      // ✅ BASE64'E ÇEVİR
+      const base64Image = canvas.toDataURL('image/jpeg', 0.7);
 
-        const formData = new FormData();
-        formData.append('image', blob, `camera-${cameraId}-${Date.now()}.jpg`);
-        formData.append('cameraId', cameraId.toString());
+      try {
+        const response = await fetch(`${API_BASE}/ai/analyze-frame`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            frame: base64Image, // ✅ Base64 string
+            cameraId: cameraId.toString()
+          })
+        });
 
-        try {
-       // captureAndSendFrame içinde:
-const res = await fetch(`${API_BASE}/ai/analyze-frame`, {
-  method: 'POST',
-  body: formData,
-});
+        console.log('📨 Backend cevabı:', response.status);
 
-          if (res.ok) {
-            const result = await res.json();
-            setLastCapture(new Date());
-            setDetections(result.detections || []);
-          }
-        } catch (err) {
-          console.error('API hatası:', err);
+        if (response.ok) {
+          const result = await response.json();
+          setLastCapture(new Date());
+          setDetections(result.detections || []);
+          console.log('✅ AI tespitleri:', result.detections);
+        } else {
+          console.error('❌ Backend hatası:', response.status);
         }
-      }, 'image/jpeg', 0.7);
+      } catch (err) {
+        console.error('API hatası:', err);
+      }
 
     } catch (error) {
       console.error('Capture hatası:', error);
     }
-  }, [cameraId, isActive]);
+  }, [cameraId, isActive, API_BASE]);
 
   // Interval yönetimi
   useEffect(() => {
@@ -116,7 +120,7 @@ const res = await fetch(`${API_BASE}/ai/analyze-frame`, {
     };
   }, [isActive, captureAndSendFrame]);
 
-  // Overlay çizimi
+  // Overlay çizimi (aynı kalıyor)
   useEffect(() => {
     if (!videoRef.current || !overlayRef.current) return;
 
