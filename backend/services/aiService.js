@@ -19,15 +19,16 @@ class AIService {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         console.log(`🔄 Deneme ${attempt}/${maxRetries}`);
-        const formData = new FormData();
-        formData.append('image', imageBuffer, `frame-${cameraId}-${Date.now()}.jpg`);
-        formData.append('cameraId', cameraId.toString());
+       const formData = new FormData();
+formData.append('image', imageBuffer, `frame-${cameraId}-${Date.now()}.jpg`);
+formData.append('cameraId', cameraId.toString());
 
-        const response = await axios.post(
-          `${this.pythonApiUrl}/api/analyze-frame`,
-          formData,
-          { headers: formData.getHeaders(), timeout: 30000 }
-        );
+const response = await axios.post(
+  `${this.pythonApiUrl}/api/analyze-frame`,
+  formData,
+  { headers: formData.getHeaders(), timeout: 30000 }
+);
+
 
         const result = response.data;
         if (result.success) {
