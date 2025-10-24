@@ -101,7 +101,7 @@ const Dashboard = () => {
                   key={camera.id}
                   cameraId={camera.id}
                   cameraName={camera.name}
-streamUrl={`${process.env.REACT_APP_BACKEND_URL.replace('/api','')}/video/${camera.id}`}
+streamUrl={`${import.meta.env.VITE_BACKEND_URL.replace('/api','')}/video/${camera.id}`}
                 />
               ))}
             </div>
