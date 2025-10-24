@@ -5,6 +5,8 @@ const VideoFeed = ({ cameraId, cameraName, enabled = true }) => {
   const overlayRef = useRef(null);
   const animationRef = useRef(null);
   const intervalRef = useRef(null);
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -79,10 +81,11 @@ const VideoFeed = ({ cameraId, cameraName, enabled = true }) => {
         formData.append('cameraId', cameraId.toString());
 
         try {
-          const res = await fetch('http://localhost:5000/api/ai/analyze-frame', {
-            method: 'POST',
-            body: formData,
-          });
+       // captureAndSendFrame içinde:
+const res = await fetch(`${BACKEND_URL}/ai/analyze-frame`, {
+  method: 'POST',
+  body: formData,
+});
 
           if (res.ok) {
             const result = await res.json();
