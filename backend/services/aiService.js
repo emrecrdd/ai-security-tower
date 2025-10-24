@@ -5,52 +5,48 @@ const Alarm = require('../models/Alarm');
 class AIService {
   constructor() {
     this.isEnabled = process.env.AI_ENABLED === 'true';
-    this.pythonApiUrl = process.env.AI_SERVICE_URL || 'http://localhost:5001';
+    this.pythonApiUrl = process.env.AI_SERVICE_URL; // Hugging Face Space URL
   }
 
   async analyzeSecurityImage(imageBuffer, cameraId) {
     if (!this.isEnabled) return { success: false, error: 'AI kapalı' };
     
-    console.log(`🤖 Python AI'ya frame gönderiliyor - Kamera: ${cameraId}`);
-    
-    const maxRetries = 3;
-    let lastError;
+    console.log(`🤖 Hugging Face AI'ya frame gönderiliyor - Kamera: ${cameraId}`);
 
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      try {
-        console.log(`🔄 Deneme ${attempt}/${maxRetries}`);
-       const formData = new FormData();
-formData.append('image', imageBuffer, `frame-${cameraId}-${Date.now()}.jpg`);
-formData.append('cameraId', cameraId.toString());
+    const formData = new FormData();
+    formData.append('image', imageBuffer, `frame-${cameraId}-${Date.now()}.jpg`);
 
-const response = await axios.post(
-  `${this.pythonApiUrl}/api/analyze-frame`,
-  formData,
-  { headers: formData.getHeaders(), timeout: 30000 }
-);
+    try {
+      const response = await axios.post(
+        `${this.pythonApiUrl}/api/analyze-frame`,
+        formData,
+        {
+          headers: formData.getHeaders(),
+          timeout: 30000
+        }
+      );
 
+      const result = response.data;
 
-        const result = response.data;
-        if (result.success) {
-          if (result.detections?.length) {
-            await this.checkAndCreateAlarms(result.detections, cameraId);
-          }
-          return result;
-        } else throw new Error(result.error);
-
-      } catch (error) {
-        lastError = error;
-        console.error(`❌ Deneme ${attempt} başarısız:`, error.message);
-        if (attempt < maxRetries) await new Promise(r => setTimeout(r, 2000));
+      // Space response’u kontrol
+      if (!result || !result.success) {
+        throw new Error(result?.error || 'Hugging Face AI başarısız');
       }
-    }
 
-    console.error('❌ Tüm Python AI denemeleri başarısız');
-    throw new Error(`Python AI bağlantı hatası: ${lastError.message}`);
+      if (result.detections?.length) {
+        await this.checkAndCreateAlarms(result.detections, cameraId);
+      }
+
+      return result;
+
+    } catch (error) {
+      console.error('❌ Hugging Face AI bağlantı hatası:', error.message);
+      return { success: false, error: error.message };
+    }
   }
 
   async checkAndCreateAlarms(detections, cameraId) {
-    const personDetection = detections.find(d => d.class === 'person' && d.confidence > 0.6);
+    const personDetection = detections.find(d => d.label === 'person' && d.confidence > 0.6);
     if (personDetection) await this.createAlarmFromDetection(personDetection, cameraId);
   }
 
@@ -59,8 +55,8 @@ const response = await axios.post(
       const objectTypes = { person: 'İNSAN_TESPİTİ', car: 'ARAÇ_TESPİTİ', truck: 'ARAÇ_TESPİTİ' };
       const alarmData = {
         cameraId: parseInt(cameraId),
-        type: objectTypes[detection.class] || 'NESNE_TESPİTİ',
-        objectType: detection.class,
+        type: objectTypes[detection.label] || 'NESNE_TESPİTİ',
+        objectType: detection.label,
         confidence: detection.confidence,
         riskLevel: detection.confidence > 0.7 ? 'HIGH' : 'MEDIUM',
         aiVerified: true,
@@ -73,6 +69,7 @@ const response = await axios.post(
       global.io?.emit('newAlarm', newAlarm);
       console.log(`🚨 Alarm oluşturuldu: ${alarmData.type} - %${(alarmData.confidence*100).toFixed(1)}`);
       return newAlarm;
+
     } catch (error) {
       console.error('❌ Alarm oluşturma hatası:', error);
     }
