@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-REACT_APP_SOCKET_URL=https://ai-security-tower-backend.onrender.com
+const SOCKET_URL = process.env.REACT_APP_SOCKET_URL; // <-- Burada process.env kullan
 
 export const socket = io(SOCKET_URL);
 
