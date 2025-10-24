@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = 'http://localhost:5000';
+REACT_APP_SOCKET_URL=https://ai-security-tower-backend.onrender.com
 
 export const socket = io(SOCKET_URL);
 
