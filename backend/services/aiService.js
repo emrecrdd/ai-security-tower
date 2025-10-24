@@ -1,5 +1,4 @@
 const axios = require('axios');
-const FormData = require('form-data');
 const Alarm = require('../models/Alarm');
 
 class AIService {
@@ -11,26 +10,24 @@ class AIService {
   async analyzeSecurityImage(imageBuffer, cameraId) {
     if (!this.isEnabled) return { success: false, error: 'AI kapalı' };
 
-    console.log(`🤖 Hugging Face AI'ya frame gönderiliyor - Kamera: ${cameraId}`);
+    console.log(`🤖 GERÇEK Hugging Face AI - Kamera: ${cameraId}`);
 
     try {
-      // 🎯 HATA BURADA: Hugging Face Space FastAPI bekliyor, doğrudan FormData gönder
-      const formData = new FormData();
-      formData.append('image', imageBuffer, {
-        filename: `frame-${cameraId}-${Date.now()}.jpg`,
-        contentType: 'image/jpeg'
-      });
-
-      // ✅ DÜZELTME: Doğru endpoint ve header ayarları
+      // ✅ DÜZELTME: Base64 formatında gönder (Python kodu bunu bekliyor)
+      const base64Image = imageBuffer.toString('base64');
+      
       const response = await axios.post(
-        `${this.hfUrl}/api/analyze-frame`, // Python backend'inizin endpoint'i
-        formData,
+        `${this.hfUrl}/api/analyze-frame`,
+        {
+          image: `data:image/jpeg;base64,${base64Image}`,
+          camera_id: cameraId
+        },
         {
           headers: {
-            ...formData.getHeaders(),
-            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
           },
-          timeout: 30000,
+          timeout: 45000, // HF Space yavaş olabilir
           maxContentLength: Infinity,
           maxBodyLength: Infinity
         }
@@ -43,7 +40,7 @@ class AIService {
         return { success: false, error: result?.error || 'AI analiz başarısız' };
       }
 
-      console.log(`✅ AI tespitleri: ${result.detections?.length || 0} nesne`);
+      console.log(`✅ GERÇEK AI tespitleri: ${result.detections?.length || 0} nesne`);
 
       // Alarm kontrolü
       if (result.detections?.length > 0) {
@@ -53,7 +50,7 @@ class AIService {
       return result;
 
     } catch (err) {
-      console.error('❌ Hugging Face AI bağlantı hatası:', {
+      console.error('❌ GERÇEK Hugging Face AI bağlantı hatası:', {
         message: err.message,
         url: `${this.hfUrl}/api/analyze-frame`,
         cameraId: cameraId
@@ -66,6 +63,7 @@ class AIService {
         console.error('❌ İstek Hatası:', err.request);
       }
       
+      // MOCK YOK - sadece hata döndür
       return { 
         success: false, 
         error: err.message,
@@ -125,7 +123,7 @@ class AIService {
         global.io.emit('newAlarm', newAlarm);
       }
       
-      console.log(`🚨 Alarm oluşturuldu: ${alarmData.type} - %${(alarmData.confidence*100).toFixed(1)}`);
+      console.log(`🚨 GERÇEK Alarm oluşturuldu: ${alarmData.type} - %${(alarmData.confidence*100).toFixed(1)}`);
       return newAlarm;
 
     } catch (err) {
