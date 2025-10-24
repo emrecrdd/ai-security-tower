@@ -1,4 +1,3 @@
-// backend/models/Alarm.js - GÜNCELLENMİŞ
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 const Camera = require("./Camera");
@@ -25,17 +24,16 @@ const Alarm = sequelize.define("Alarm", {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   },
-  // YENİ ALANLAR - AI ve Raporlama için
   confidence: {
     type: DataTypes.FLOAT,
     defaultValue: 0.0
   },
   objectType: {
-    type: DataTypes.STRING, // 'person', 'car', 'truck'
+    type: DataTypes.STRING,
     allowNull: true
   },
   location: {
-    type: DataTypes.JSON, // {x1, y1, x2, y2} koordinatları
+    type: DataTypes.JSON,
     allowNull: true
   },
   riskLevel: {
@@ -45,6 +43,11 @@ const Alarm = sequelize.define("Alarm", {
   aiVerified: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
+  },
+  // ✅ BBOX FIELD'INI EKLE
+  bbox: {
+    type: DataTypes.JSON,
+    allowNull: true
   }
 }, {
   tableName: "alarms",
@@ -54,4 +57,4 @@ const Alarm = sequelize.define("Alarm", {
 Camera.hasMany(Alarm, { foreignKey: "cameraId" });
 Alarm.belongsTo(Camera, { foreignKey: "cameraId" });
 
-module.exports = Alarm; 
+module.exports = Alarm;
