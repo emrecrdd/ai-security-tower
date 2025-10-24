@@ -19,14 +19,15 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-  origin: ["https://thunderous-naiad-6c6b88.netlify.app"],
-  methods: ["GET","POST"]
-}
+    origin: ["https://thunderous-naiad-6c6b88.netlify.app"],
+    methods: ["GET","POST"]
+  }
 });
 
-// 🔹 Middleware
+// 🔹 Middleware - ✅ LIMIT EKLENDI!
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' })); // ✅ Base64 için büyük limit
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // 🔹 Router'lar
 const routes = require("./routes");
@@ -46,6 +47,9 @@ io.on("connection", (socket) => {
   });
 });
 
+// 🔹 Global io objesi - ✅ BU SATIR EKLENDI!
+global.io = io;
+
 // 🔹 Sequelize tablolarını senkronize et
 sequelize
   .sync({ alter: true })
@@ -53,7 +57,6 @@ sequelize
   .catch((err) => logger.error("❌ Tablolar senkronize edilemedi:", err));
 
 // 🔹 Socket'i dışa aktar (controller'larda kullanılabilir)
-// ✅ BU SATIRI EN SONA AL
 module.exports = { io, server };
 
 // 🔹 Sunucu başlatma
