@@ -19,7 +19,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["https://thunderous-naiad-6c6b88.netlify.app"],
+    origin: ["https://emrecrd.netlify.app/"],
     methods: ["GET","POST"]
   }
 });
